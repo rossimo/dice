@@ -1,0 +1,16 @@
+{
+  "name": "dicebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "lex": "1.7.9",
+    "lodash": "^4.13.1",
+    "mathjs": "3.2.1"
+  }
+}
