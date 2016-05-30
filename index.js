@@ -120,15 +120,22 @@ var app = koa();
 app.use(koaBody());
 
 var router = koaRouter();
+var allowed = JSON.parse(process.env.ALLOWED || '[]');
+
 
 router.post('/', function *() {
-    var dice = new Dice(this.request.body.text);
-    dice.execute();
+    var user = this.request.body.user_name;
+    var response = 'Only patrons are allowed to test beta releases. ' +
+        'Support development at  https://www.patreon.com/rpg_talk';
 
-    var result = dice.stack.pop();
-    var rolls = dice.rolls;
+    if (allowed.contains(user)) {
+        var dice = new Dice(this.request.body.text);
+        dice.execute();
 
-    var response = rolls + ' = ' + result;
+        var result = dice.stack.pop();
+        var rolls = dice.rolls;
+        response = rolls + ' = ' + result;
+    }
 
     this.body = {
         response_type: 'in_channel',
@@ -136,8 +143,7 @@ router.post('/', function *() {
     }
 });
 
-app
-    .use(router.routes())
-    .use(router.allowedMethods());
+app.use(router.routes())
+app.use(router.allowedMethods());
 
 app.listen((process.env.PORT || 5000));
