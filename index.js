@@ -1,6 +1,9 @@
 var _ = require("lodash");
 var Lexer = require("lex");
 var Parser = require("./parse");
+var koa = require('koa');
+var koaBody = require('koa-body');
+var koaRouter = require('koa-router');
 
 var lexer = new Lexer;
 
@@ -50,61 +53,87 @@ function parse(input) {
     return parser.parse(tokens);
 }
 
-var rolls = [];
+var Dice = function(command) {
+    var self = this;
+    self.rolls = [];
+    self.stack = [];
+    self.command = command;
 
-function roll(min, max) {
-    var die = Math.floor(Math.random() * (max - min + 1)) + min;
-    rolls.push(die);
-    return die;
-}
-
-var operator = {
-    "d": function (a, b) {
-        return _.range(a)
-            .map(() => roll(1, b))
-            .reduce((x, y) => x + y);
-    },
-    "df": function (a) {
-        return _.range(a)
-            .map(() => roll(-1, 1))
-            .reduce((x, y) => x + y);
-    },
-    "+": function (a, b) {
-        return a + b;
-    },
-    "-": function (a, b) {
-        return a - b;
-    },
-    "*": function (a, b) {
-        return a * b;
-    },
-    "/": function (a, b) {
-        return a / b;
+    self.operator = {
+        "d": function (a, b) {
+            return _.range(a)
+                .map(() => self.roll(1, b))
+                .reduce((x, y) => x + y);
+        },
+        "df": function (a) {
+            return _.range(a)
+                .map(() => self.roll(-1, 1))
+                .reduce((x, y) => x + y);
+        },
+        "+": function (a, b) {
+            return a + b;
+        },
+        "-": function (a, b) {
+            return a - b;
+        },
+        "*": function (a, b) {
+            return a * b;
+        },
+        "/": function (a, b) {
+            return a / b;
+        }
     }
 };
 
-var stack = [];
+Dice.prototype.roll = function (min, max) {
+    var die = Math.floor(Math.random() * (max - min + 1)) + min;
+    this.rolls.push(die);
+    return die;
+};
 
-parse("(3d20-4df+1df)*2").forEach(function (c) {
-    switch (c) {
-        case "+":
-        case "-":
-        case "*":
-        case "/":
-        case "d":
-            var b = +stack.pop();
-            var a = +stack.pop();
-            stack.push(operator[c](a, b));
-            break;
-        case "df":
-            var a = +stack.pop();
-            stack.push(operator[c](a));
-            break;
-        default:
-            stack.push(parseInt(c));
+Dice.prototype.execute = function() {
+    var self = this;
+
+    parse(self.command).forEach(function (c) {
+        switch (c) {
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "d":
+                var b = +self.stack.pop();
+                var a = +self.stack.pop();
+                self.stack.push(self.operator[c](a, b));
+                break;
+            case "df":
+                var a = +self.stack.pop();
+                self.stack.push(self.operator[c](a));
+                break;
+            default:
+                self.stack.push(parseInt(c));
+                break;
+        }
+    });
+};
+
+var app = koa();
+app.use(koaBody());
+
+var router = koaRouter();
+
+router.post('/', function *() {
+    var dice = new Dice(this.request.body.text);
+    dice.execute();
+
+    var result = dice.stack.pop();
+    var rolls = dice.rolls;
+
+    var response = rolls + ' = ' + result;
+
+    this.body = {
+        response_type: 'in_channel',
+        text: response
     }
 });
 
-var output = stack.pop();
-console.log(rolls);
-console.log(output);
+app.listen(3000);
