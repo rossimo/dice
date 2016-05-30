@@ -9,4 +9,11 @@ describe('Dice', function () {
 
         assert.equal(dice.rolls.length, 3);
     });
+
+    it('follows pre-seeded RNG for tests', function () {
+        var dice = new Dice("3d20", () => 2);
+        dice.execute();
+
+        assert.equal(dice.result(), 6);
+    });
 });

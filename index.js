@@ -19,7 +19,7 @@ router.post('/', function *() {
         var dice = new Dice(this.request.body.text);
         dice.execute();
 
-        var result = dice.stack.pop();
+        var result = dice.result();
         var rolls = dice.rolls;
         response = rolls + ' = ' + result;
     }
