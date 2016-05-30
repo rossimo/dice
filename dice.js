@@ -116,6 +116,6 @@ Dice.prototype.execute = function () {
 
 Dice.prototype.result = function() {
     return this.stack.pop();
-}
+};
 
 module.exports = Dice;

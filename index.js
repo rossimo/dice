@@ -30,7 +30,7 @@ router.post('/', function *() {
     }
 });
 
-app.use(router.routes())
+app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.listen((process.env.PORT || 5000));
