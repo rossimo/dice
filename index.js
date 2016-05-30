@@ -125,8 +125,8 @@ var allowed = JSON.parse(process.env.ALLOWED || '[]');
 
 router.post('/', function *() {
     var user = this.request.body.user_name;
-    var response = 'Only patrons are allowed to test beta releases. ' +
-        'Support development at  https://www.patreon.com/rpg_talk';
+    var response = 'Only #treasure_room members are allowed to test beta releases. ' +
+        'Support development at https://www.patreon.com/rpg_talk';
 
     if (_.includes(allowed, user)) {
         var dice = new Dice(this.request.body.text);
