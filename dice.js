@@ -5,7 +5,9 @@ var Parser = require("./parse");
 var lexer = new Lexer;
 
 // whitespace
-lexer.addRule(/\s+/, () => {this.reject = true});
+lexer.addRule(/\s+/, () => {
+    this.reject = true
+});
 
 // n-side roller
 lexer.addRule(/d/, lexeme => lexeme);
@@ -59,12 +61,12 @@ var Dice = function (command, rng) {
 
     self.operator = {
         "d": function (a, b) {
-            return _.range(a)
-                .map(() => self.roll(1, b))
+            return _.range(Math.min(a, 100))
+                .map(() => self.roll(1, Math.min(b, 1000)))
                 .reduce((x, y) => x + y);
         },
         "df": function (a) {
-            return _.range(a)
+            return _.range(Math.min(a, 100))
                 .map(() => self.roll(-1, 1))
                 .reduce((x, y) => x + y);
         },
@@ -84,9 +86,12 @@ var Dice = function (command, rng) {
 };
 
 Dice.prototype.roll = function (min, max) {
-    var die = this.rng(min, max);
+    var die = {
+        result: this.rng(min, max),
+        sides: max - min + 1
+    };
     this.rolls.push(die);
-    return die;
+    return die.result;
 };
 
 Dice.prototype.execute = function () {
@@ -114,7 +119,7 @@ Dice.prototype.execute = function () {
     });
 };
 
-Dice.prototype.result = function() {
+Dice.prototype.result = function () {
     return this.stack.pop();
 };
 

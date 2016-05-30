@@ -36,4 +36,25 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 4);
     });
+
+    it('caps n-sided die rolls at 100', function () {
+        var dice = new Dice("150d20");
+        dice.execute();
+
+        assert.equal(dice.rolls.length, 100);
+    });
+
+    it('caps n-sided die sides at 1000', function () {
+        var dice = new Dice("1d1001");
+        dice.execute();
+
+        assert.equal(dice.rolls[0].sides, 1000);
+    });
+
+    it('caps fudge die rolls at 100', function () {
+        var dice = new Dice("150df");
+        dice.execute();
+
+        assert.equal(dice.rolls.length, 100);
+    });
 });
