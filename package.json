@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha tests/*"
   },
+  "engines" : {
+    "node" : ">=4"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
