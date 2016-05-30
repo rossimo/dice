@@ -136,4 +136,8 @@ router.post('/', function *() {
     }
 });
 
+app
+    .use(router.routes())
+    .use(router.allowedMethods());
+
 app.listen((process.env.PORT || 5000));
