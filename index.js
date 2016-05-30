@@ -20,7 +20,7 @@ router.post('/', function *() {
         dice.execute();
 
         var result = dice.result();
-        var rolls = dice.rolls;
+        var rolls = dice.rolls.map((die) => die.result);
         response = rolls + ' = ' + result;
     }
 
