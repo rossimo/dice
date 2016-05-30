@@ -50,11 +50,12 @@ function parse(input) {
     return parser.parse(tokens);
 }
 
-var Dice = function(command) {
+var Dice = function (command, rng) {
     var self = this;
     self.rolls = [];
     self.stack = [];
     self.command = command;
+    self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
     self.operator = {
         "d": function (a, b) {
@@ -83,12 +84,12 @@ var Dice = function(command) {
 };
 
 Dice.prototype.roll = function (min, max) {
-    var die = Math.floor(Math.random() * (max - min + 1)) + min;
+    var die = this.rng(min, max);
     this.rolls.push(die);
     return die;
 };
 
-Dice.prototype.execute = function() {
+Dice.prototype.execute = function () {
     var self = this;
 
     parse(self.command).forEach(function (c) {

@@ -15,5 +15,9 @@
     "lex": "1.7.9",
     "lodash": "^4.13.1",
     "mathjs": "3.2.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
   }
 }
