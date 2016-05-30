@@ -1,3 +1,6 @@
+[![Slack Status](https://slack.rpg-talk.com/badge.svg)](https://rpg-talk.com)
+[![Build Status](https://travis-ci.org/rossimo/dice.svg?branch=master)](https://travis-ci.org/rossimo/dice)
+
 ### Dice Roller for RPG Talk
 
 ```
