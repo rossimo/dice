@@ -2,11 +2,18 @@ var Dice = require('../dice');
 var assert = require('chai').assert;
 
 describe('Dice', function () {
-    it('randomly correct number of n-sided dice', function () {
+    it('rolls correct number of n-sided dice', function () {
         var dice = new Dice("3d20");
         dice.execute();
 
         assert.equal(dice.rolls.length, 3);
+    });
+
+    it('rolls correct number of fudge dice', function () {
+        var dice = new Dice("4df");
+        dice.execute();
+
+        assert.equal(dice.rolls.length, 4);
     });
 
     it('follows pre-seeded RNG for tests', function () {
