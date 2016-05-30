@@ -5,7 +5,7 @@ var Parser = require("./parse");
 var lexer = new Lexer;
 
 // whitespace
-lexer.addRule(/\s+/);
+lexer.addRule(/\s+/, () => {this.reject = true});
 
 // n-side roller
 lexer.addRule(/d/, lexeme => lexeme);
