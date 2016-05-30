@@ -128,7 +128,7 @@ router.post('/', function *() {
     var response = 'Only patrons are allowed to test beta releases. ' +
         'Support development at  https://www.patreon.com/rpg_talk';
 
-    if (allowed.contains(user)) {
+    if (_.includes(allowed, user)) {
         var dice = new Dice(this.request.body.text);
         dice.execute();
 
