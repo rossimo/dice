@@ -60,13 +60,18 @@ var Dice = function (command, rng) {
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
     self.operator = {
-        "d": function (a, b) {
-            return _.range(Math.min(a, 100))
-                .map(() => self.roll(1, Math.min(b, 1000)))
+        "d": function (rolls, sides) {
+            rolls = Math.min(rolls, 100);
+            sides = Math.min(sides, 1000);
+
+            return _.range(rolls)
+                .map(() => self.roll(1, sides))
                 .reduce((x, y) => x + y);
         },
-        "df": function (a) {
-            return _.range(Math.min(a, 100))
+        "df": function (rolls) {
+            rolls = Math.min(rolls, 100);
+
+            return _.range(rolls)
                 .map(() => self.roll(-1, 1))
                 .reduce((x, y) => x + y);
         },
