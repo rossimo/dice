@@ -147,7 +147,6 @@ Dice.prototype.execute = function () {
                 var a = self.stack.pop();
                 self.stack.push(self.operator[c](a, b));
                 break;
-                break;
             case "df":
                 var a = self.stack.pop();
                 self.stack.push(self.operator[c](a));
