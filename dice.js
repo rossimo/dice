@@ -15,6 +15,10 @@ lexer.addRule(/d/, lexeme => lexeme);
 // fudge roller
 lexer.addRule(/df/, lexeme => lexeme);
 
+// kept
+lexer.addRule(/kh/, lexeme => lexeme);
+lexer.addRule(/kl/, lexeme => lexeme);
+
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
 
@@ -22,16 +26,21 @@ lexer.addRule(/[0-9]+/, lexeme => lexeme);
 lexer.addRule(/[\(\+\-\*\/\)]/, lexeme => lexeme);
 
 var first = {
-    precedence: 3,
+    precedence: 4,
     associativity: "left"
 };
 
 var second = {
-    precedence: 2,
+    precedence: 3,
     associativity: "left"
 };
 
 var third = {
+    precedence: 2,
+    associativity: "left"
+};
+
+var fourth = {
     precedence: 1,
     associativity: "left"
 };
@@ -39,10 +48,12 @@ var third = {
 var parser = new Parser({
     "d": first,
     "df": first,
-    "*": second,
-    "/": second,
-    "+": third,
-    "-": third
+    "kh": second,
+    "kl": second,
+    "*": third,
+    "/": third,
+    "+": fourth,
+    "-": fourth
 });
 
 function parse(input) {
@@ -88,6 +99,14 @@ var Dice = function (command, rng) {
 
             return roll;
         },
+        "kh": function (roll, keep) {
+            var kept = roll.dice.sort((l, r) => l < r).slice(0, keep);
+            return new Integer(kept.reduce((x, y) => x + y));
+        },
+        "kl": function (roll, keep) {
+            var kept = roll.dice.sort((l, r) => l > r).slice(0, keep);
+            return new Integer(kept.reduce((x, y) => x + y));
+        },
         "+": function (a, b) {
             return new Integer(a + b);
         },
@@ -124,6 +143,12 @@ Dice.prototype.execute = function () {
             case "d":
                 var b = self.stack.pop().value;
                 var a = self.stack.pop().value;
+                self.stack.push(self.operator[c](a, b));
+                break;
+            case "kh":
+            case "kl":
+                var b = self.stack.pop().value;
+                var a = self.stack.pop();
                 self.stack.push(self.operator[c](a, b));
                 break;
             case "df":

@@ -57,4 +57,20 @@ describe('Dice', function () {
 
         assert.equal(dice.rolls.length, 100);
     });
+
+    it('keeps highest dice', function () {
+        var rng = [11, 19, 1];
+        var dice = new Dice("3d20kh2", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 30);
+    });
+
+    it('keeps lowest dice', function () {
+        var rng = [11, 19, 1];
+        var dice = new Dice("3d20kl2", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 12);
+    });
 });
