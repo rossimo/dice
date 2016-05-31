@@ -89,4 +89,12 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 4);
     });
+
+    it('keeps low for fudge dice', function () {
+        var rng = [-1, 0, 1];
+        var dice = new Dice("3dfkl", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), -1);
+    });
 });
