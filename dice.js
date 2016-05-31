@@ -81,8 +81,8 @@ var Dice = function (command, rng) {
 
     self.operator = {
         "d": function (count, sides) {
-            count = Math.min(count, 100);
-            sides = Math.min(sides, 1000);
+            count = Math.min(count.value, 100);
+            sides = Math.min(sides.value, 1000);
 
             var roll = new Roll();
             roll.dice = _.range(count).map(() => self.roll(1, sides));
@@ -91,7 +91,7 @@ var Dice = function (command, rng) {
             return roll;
         },
         "df": function (count) {
-            count = Math.min(count, 100);
+            count = Math.min(count.value, 100);
 
             var roll = new Roll();
             roll.dice = _.range(count).map(() => self.roll(-1, 1));
@@ -100,24 +100,24 @@ var Dice = function (command, rng) {
             return roll;
         },
         "kh": function (roll, keep) {
-            var kept = roll.dice.sort((l, r) => l < r).slice(0, keep);
+            var kept = roll.dice.sort((l, r) => l < r).slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));
         },
         "kl": function (roll, keep) {
-            var kept = roll.dice.sort((l, r) => l > r).slice(0, keep);
+            var kept = roll.dice.sort().slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));
         },
         "+": function (a, b) {
-            return new Integer(a + b);
+            return new Integer(a.value + b.value);
         },
         "-": function (a, b) {
-            return new Integer(a - b);
+            return new Integer(a.value - b.value);
         },
         "*": function (a, b) {
-            return new Integer(a * b);
+            return new Integer(a.value * b.value);
         },
         "/": function (a, b) {
-            return new Integer(a / b);
+            return new Integer(a.value / b.value);
         }
     }
 };
@@ -141,18 +141,15 @@ Dice.prototype.execute = function () {
             case "*":
             case "/":
             case "d":
-                var b = self.stack.pop().value;
-                var a = self.stack.pop().value;
-                self.stack.push(self.operator[c](a, b));
-                break;
             case "kh":
             case "kl":
-                var b = self.stack.pop().value;
+                var b = self.stack.pop();
                 var a = self.stack.pop();
                 self.stack.push(self.operator[c](a, b));
                 break;
+                break;
             case "df":
-                var a = self.stack.pop().value;
+                var a = self.stack.pop();
                 self.stack.push(self.operator[c](a));
                 break;
             default:
