@@ -52,6 +52,15 @@ function parse(input) {
     return parser.parse(tokens);
 }
 
+var Integer = function(value) {
+    this.value = value;
+};
+
+var Roll = function(value, rolls) {
+    this.value = value;
+    this.dice = rolls || [];
+};
+
 var Dice = function (command, rng) {
     var self = this;
     self.rolls = [];
@@ -60,32 +69,36 @@ var Dice = function (command, rng) {
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
     self.operator = {
-        "d": function (rolls, sides) {
-            rolls = Math.min(rolls, 100);
+        "d": function (count, sides) {
+            count = Math.min(count, 100);
             sides = Math.min(sides, 1000);
 
-            return _.range(rolls)
-                .map(() => self.roll(1, sides))
-                .reduce((x, y) => x + y);
-        },
-        "df": function (rolls) {
-            rolls = Math.min(rolls, 100);
+            var roll = new Roll();
+            roll.dice = _.range(count).map(() => self.roll(1, sides));
+            roll.value = roll.dice.reduce((x, y) => x + y);
 
-            return _.range(rolls)
-                .map(() => self.roll(-1, 1))
-                .reduce((x, y) => x + y);
+            return roll;
+        },
+        "df": function (count) {
+            count = Math.min(count, 100);
+
+            var roll = new Roll();
+            roll.dice = _.range(count).map(() => self.roll(-1, 1));
+            roll.value = roll.dice.reduce((x, y) => x + y);
+
+            return roll;
         },
         "+": function (a, b) {
-            return a + b;
+            return new Integer(a + b);
         },
         "-": function (a, b) {
-            return a - b;
+            return new Integer(a - b);
         },
         "*": function (a, b) {
-            return a * b;
+            return new Integer(a * b);
         },
         "/": function (a, b) {
-            return a / b;
+            return new Integer(a / b);
         }
     }
 };
@@ -109,23 +122,23 @@ Dice.prototype.execute = function () {
             case "*":
             case "/":
             case "d":
-                var b = +self.stack.pop();
-                var a = +self.stack.pop();
+                var b = self.stack.pop().value;
+                var a = self.stack.pop().value;
                 self.stack.push(self.operator[c](a, b));
                 break;
             case "df":
-                var a = +self.stack.pop();
+                var a = self.stack.pop().value;
                 self.stack.push(self.operator[c](a));
                 break;
             default:
-                self.stack.push(parseInt(c));
+                self.stack.push(new Integer(parseInt(c)));
                 break;
         }
     });
 };
 
 Dice.prototype.result = function () {
-    return this.stack.pop();
+    return this.stack.pop().value;
 };
 
 module.exports = Dice;
