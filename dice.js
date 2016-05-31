@@ -100,10 +100,20 @@ var Dice = function (command, rng) {
             return roll;
         },
         "kh": function (roll, keep) {
+            if (roll === undefined) {
+                roll = keep;
+                keep = new Integer(1);
+            }
+
             var kept = roll.dice.sort((l, r) => l < r).slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));
         },
         "kl": function (roll, keep) {
+            if (roll === undefined) {
+                roll = keep;
+                keep = new Integer(1);
+            }
+
             var kept = roll.dice.sort().slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));
         },
