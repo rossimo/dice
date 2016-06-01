@@ -9,9 +9,7 @@ var app = koa();
 app.use(koaBody());
 
 var router = koaRouter();
-var advertisement = process.env.AD ||
-    'Thanks for being a part of RPG Talk! If you\'d like to help support development for the community, ' +
-    'become a patron at https://www.patreon.com/rpg_talk.';
+var advertisement = process.env.AD;
 var skip = JSON.parse(process.env.SKIP_AD || '[]');
 var lastAd = {};
 var adInterval = 2 * 60 * 60 * 1000;
@@ -35,7 +33,7 @@ router.post('/', function *() {
     };
 
     var now = new Date();
-    var last = lastAd[user] || new Date();
+    var last = lastAd[user] || new Date(0);
     var millisSince = now.getTime() - last.getTime();
     if (advertisement && millisSince >= adInterval && !_.includes(skip, user)) {
         lastAd[user] = now;
