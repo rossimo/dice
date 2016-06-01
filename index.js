@@ -20,12 +20,18 @@ router.post('/', function *() {
     var command = this.request.body.text;
     console.log('Command: ' + command);
 
-    var dice = new Dice(command);
-    dice.execute();
+    var response;
 
-    var result = dice.result();
-    var rolls = dice.rolls.map((die) => die.result);
-    response = rolls + ' = ' + result;
+    try {
+        var dice = new Dice(command);
+        dice.execute();
+        var result = dice.result();
+        var rolls = dice.rolls.map((die) => die.result);
+        response = rolls + ' = ' + result;
+    } catch (error) {
+        response = 'Unable to roll "' + command + '".';
+        console.log(error);
+    }
 
     this.body = {
         response_type: 'in_channel',
