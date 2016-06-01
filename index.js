@@ -17,7 +17,10 @@ var skip = JSON.parse(process.env.SKIP_AD || '[]');
 router.post('/', function *() {
     var user = this.request.body.user_name;
 
-    var dice = new Dice(this.request.body.text);
+    var command = this.request.body.text;
+    console.log(command);
+    
+    var dice = new Dice(command);
     dice.execute();
 
     var result = dice.result();
