@@ -113,7 +113,7 @@ var Dice = function (command, rng) {
         "!": function (roll) {
             var explosions = roll.dice.filter(die => die === roll.sides).length;
 
-            while (explosions > 0) {
+            while (explosions > 0 && roll.dice.length < 300) {
                 var extraRoll = new Roll(roll.sides);
                 extraRoll.dice = _.range(explosions).map(() => self.roll(1, extraRoll.sides));
                 extraRoll.value = extraRoll.dice.reduce((x, y) => x + y);

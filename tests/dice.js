@@ -68,6 +68,13 @@ describe('Dice', function () {
         assert.equal(dice.rolls.length, 300);
     });
 
+    it('caps exploding dice at 300', function () {
+        var dice = new Dice("1d1!");
+        dice.execute();
+
+        assert.equal(dice.rolls.length, 300);
+    });
+
     it('keeps highest dice', function () {
         var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kh2", () => rng.pop());
