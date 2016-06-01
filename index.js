@@ -20,9 +20,9 @@ router.post('/', function *() {
     var user = this.request.body.user_name;
 
     var command = this.request.body.text;
-    console.log(command);
+    console.log('Command: ' + command);
 
-    var dice = new Dice('Command: ' + command);
+    var dice = new Dice(command);
     dice.execute();
 
     var result = dice.result();
