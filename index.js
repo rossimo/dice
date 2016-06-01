@@ -30,7 +30,6 @@ router.post('/', function *() {
         response = rolls + ' = ' + result;
     } catch (error) {
         response = 'Unable to roll "' + command + '". ' + error.message;
-        console.log(error);
         console.log(error.stack);
     }
 
