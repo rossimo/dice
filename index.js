@@ -16,9 +16,10 @@ var adInterval = 2 * 60 * 60 * 1000;
 
 router.post('/', function *() {
     var user = this.request.body.user_name;
+    var channel = this.request.body.channel_name;
 
     var command = this.request.body.text;
-    console.log('Command: ' + command);
+    console.log(user + ' in ' + channel + ' rolled ' + command);
 
     var response;
 
@@ -29,7 +30,7 @@ router.post('/', function *() {
         var rolls = dice.rolls.map((die) => die.result);
         response = rolls + ' = ' + result;
     } catch (error) {
-        response = 'Unable to roll "' + command + '". ' + error.message;
+        response = 'Unable to roll "' + command + '"\n' + error.message;
         console.log(error.stack);
     }
 
