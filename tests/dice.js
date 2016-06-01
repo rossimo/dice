@@ -59,15 +59,23 @@ describe('Dice', function () {
     });
 
     it('keeps highest dice', function () {
-        var rng = [11, 19, 1];
+        var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kh2", () => rng.pop());
         dice.execute();
 
         assert.equal(dice.result(), 30);
     });
 
+    it('keeps highest dice with shorthand', function () {
+        var rng = [11, 19, 1].reverse();
+        var dice = new Dice("3d20k2", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 30);
+    });
+
     it('autocompletes keep high operator to 1', function () {
-        var rng = [11, 19, 1];
+        var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kh+3", () => rng.pop());
         dice.execute();
 
@@ -75,7 +83,7 @@ describe('Dice', function () {
     });
 
     it('keeps lowest dice', function () {
-        var rng = [11, 19, 1];
+        var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kl2", () => rng.pop());
         dice.execute();
 
@@ -83,7 +91,7 @@ describe('Dice', function () {
     });
 
     it('autocompletes keep low operator to 1', function () {
-        var rng = [11, 19, 1];
+        var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kl+3", () => rng.pop());
         dice.execute();
 
@@ -91,10 +99,18 @@ describe('Dice', function () {
     });
 
     it('keeps low for fudge dice', function () {
-        var rng = [-1, 0, 1];
+        var rng = [-1, 0, 1].reverse();
         var dice = new Dice("3dfkl", () => rng.pop());
         dice.execute();
 
         assert.equal(dice.result(), -1);
+    });
+
+    it('explodes dice', function () {
+        var rng = [6, 6, 1].reverse();
+        var dice = new Dice("1d6!", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 13);
     });
 });

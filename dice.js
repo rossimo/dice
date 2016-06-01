@@ -18,9 +18,13 @@ lexer.addRule(/df/, lexeme => lexeme);
 // kept
 lexer.addRule(/kh/, lexeme => lexeme);
 lexer.addRule(/kl/, lexeme => lexeme);
+lexer.addRule(/k/, lexeme => lexeme);
 
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
+
+// explosions
+lexer.addRule(/!/, lexeme => lexeme);
 
 // arithmetic
 lexer.addRule(/[\(\+\-\*\/\)]/, lexeme => lexeme);
@@ -50,6 +54,8 @@ var parser = new Parser({
     "df": first,
     "kh": second,
     "kl": second,
+    "k": second,
+    "!": second,
     "*": third,
     "/": third,
     "+": fourth,
@@ -63,11 +69,12 @@ function parse(input) {
     return parser.parse(tokens);
 }
 
-var Integer = function(value) {
+var Integer = function (value) {
     this.value = value;
 };
 
-var Roll = function(value, rolls) {
+var Roll = function (sides, value, rolls) {
+    this.sides = sides;
     this.value = value;
     this.dice = rolls || [];
 };
@@ -84,7 +91,7 @@ var Dice = function (command, rng) {
             count = Math.min(count.value, 100);
             sides = Math.min(sides.value, 1000);
 
-            var roll = new Roll();
+            var roll = new Roll(sides);
             roll.dice = _.range(count).map(() => self.roll(1, sides));
             roll.value = roll.dice.reduce((x, y) => x + y);
 
@@ -93,9 +100,25 @@ var Dice = function (command, rng) {
         "df": function (count) {
             count = Math.min(count.value, 100);
 
-            var roll = new Roll();
+            var roll = new Roll(3);
             roll.dice = _.range(count).map(() => self.roll(-1, 1));
             roll.value = roll.dice.reduce((x, y) => x + y);
+
+            return roll;
+        },
+        "!": function (roll) {
+            var explosions = roll.dice.filter(die => die === roll.sides).length;
+
+            while (explosions > 0) {
+                var extraRoll = new Roll(roll.sides);
+                extraRoll.dice = _.range(explosions).map(() => self.roll(1, extraRoll.sides));
+                extraRoll.value = extraRoll.dice.reduce((x, y) => x + y);
+
+                roll.value += extraRoll.value;
+                roll.dice = roll.dice.concat(extraRoll.dice);
+
+                explosions = extraRoll.dice.filter(die => die === roll.sides).length;
+            }
 
             return roll;
         },
@@ -129,7 +152,9 @@ var Dice = function (command, rng) {
         "/": function (a, b) {
             return new Integer(a.value / b.value);
         }
-    }
+    };
+
+    self.operator.k = self.operator.kh;
 };
 
 Dice.prototype.roll = function (min, max) {
@@ -153,10 +178,12 @@ Dice.prototype.execute = function () {
             case "d":
             case "kh":
             case "kl":
+            case "k":
                 var b = self.stack.pop();
                 var a = self.stack.pop();
                 self.stack.push(self.operator[c](a, b));
                 break;
+            case "!":
             case "df":
                 var a = self.stack.pop();
                 self.stack.push(self.operator[c](a));
