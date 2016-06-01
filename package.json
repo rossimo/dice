@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha tests/*"
   },
-  "engines" : {
-    "node" : ">=4"
+  "engines": {
+    "node": ">=4"
   },
   "author": "",
   "license": "MIT",
@@ -17,7 +17,8 @@
     "koa-router": "^5.4.0",
     "lex": "1.7.9",
     "lodash": "^4.13.1",
-    "mathjs": "3.2.1"
+    "mathjs": "3.2.1",
+    "request": "^2.72.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
