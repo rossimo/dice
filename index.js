@@ -29,8 +29,9 @@ router.post('/', function *() {
         var rolls = dice.rolls.map((die) => die.result);
         response = rolls + ' = ' + result;
     } catch (error) {
-        response = 'Unable to roll "' + command + '".';
+        response = 'Unable to roll "' + command + '"';
         console.log(error);
+        console.log(error.stack);
     }
 
     this.body = {
