@@ -13,14 +13,16 @@ var advertisement = process.env.AD ||
     'Thanks for being a part of RPG Talk! If you\'d like to help support development for the community, ' +
     'become a patron at https://www.patreon.com/rpg_talk.';
 var skip = JSON.parse(process.env.SKIP_AD || '[]');
+var lastAd = {};
+var adInterval = 2 * 60 * 60 * 1000;
 
 router.post('/', function *() {
     var user = this.request.body.user_name;
 
     var command = this.request.body.text;
     console.log(command);
-    
-    var dice = new Dice(command);
+
+    var dice = new Dice('Command: ' + command);
     dice.execute();
 
     var result = dice.result();
@@ -32,7 +34,12 @@ router.post('/', function *() {
         text: response
     };
 
-    if (!_.includes(skip, user)) {
+    var now = new Date();
+    var last = lastAd[user] || new Date();
+    var millisSince = now.getTime() - last.getTime();
+    if (advertisement && millisSince >= adInterval && !_.includes(skip, user)) {
+        lastAd[user] = now;
+
         request.post({
             url: this.request.body.response_url,
             headers: {'content-type': 'application/json'},
