@@ -30,8 +30,10 @@ router.post('/', function *() {
     };
 
     if (!_.includes(skip, user)) {
-        request.post(this.request.body.response_url, {
-            text: advertisement
+        request.post({
+            url: this.request.body.response_url,
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({text: advertisement})
         });
     }
 });
