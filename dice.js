@@ -87,9 +87,13 @@ var Dice = function (command, rng) {
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
     self.operator = {
-        "d": function (count, sides) {
-            count = Math.min(count.value, 100);
-            sides = Math.min(sides.value, 1000);
+        "d": function () {
+            var arguments = Array.from(arguments).filter(arg => arg !== undefined);
+            var count = arguments.shift() || new Integer(1);
+            var sides = arguments.shift() || new Integer(6);
+
+            count = Math.max(Math.min(count.value, 300), 1);
+            sides = Math.max(Math.min(sides.value, 300), 1);
 
             var roll = new Roll(sides);
             roll.dice = _.range(count).map(() => self.roll(1, sides));
@@ -98,7 +102,7 @@ var Dice = function (command, rng) {
             return roll;
         },
         "df": function (count) {
-            count = Math.min(count.value, 100);
+            count = Math.max(Math.min(count.value, 300), 1);
 
             var roll = new Roll(3);
             roll.dice = _.range(count).map(() => self.roll(-1, 1));
@@ -122,20 +126,18 @@ var Dice = function (command, rng) {
 
             return roll;
         },
-        "kh": function (roll, keep) {
-            if (roll === undefined) {
-                roll = keep;
-                keep = new Integer(1);
-            }
+        "kh": function () {
+            var arguments = Array.from(arguments).filter(arg => arg !== undefined);
+            var roll = arguments.shift();
+            var keep = arguments.shift() || new Integer(1);
 
             var kept = roll.dice.sort((l, r) => l < r).slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));
         },
-        "kl": function (roll, keep) {
-            if (roll === undefined) {
-                roll = keep;
-                keep = new Integer(1);
-            }
+        "kl": function () {
+            var arguments = Array.from(arguments).filter(arg => arg !== undefined);
+            var roll = arguments.shift();
+            var keep = arguments.shift() || new Integer(1);
 
             var kept = roll.dice.sort().slice(0, keep.value);
             return new Integer(kept.reduce((x, y) => x + y));

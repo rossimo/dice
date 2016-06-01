@@ -9,6 +9,16 @@ describe('Dice', function () {
         assert.equal(dice.rolls.length, 3);
     });
 
+    it('infers 1d6 when operands are missing', function () {
+        var dice = new Dice("d", () => 3);
+        dice.execute();
+
+        var roll = dice.stack.pop();
+        assert.equal(roll.value, 3);
+        assert.equal(roll.sides, 6);
+        assert.equal(roll.dice.length, 1);
+    });
+
     it('rolls correct number of fudge dice', function () {
         var dice = new Dice("4df");
         dice.execute();
@@ -37,25 +47,25 @@ describe('Dice', function () {
         assert.equal(dice.result(), 4);
     });
 
-    it('caps n-sided die rolls at 100', function () {
-        var dice = new Dice("150d20");
+    it('caps n-sided die rolls at 300', function () {
+        var dice = new Dice("350d20");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 100);
+        assert.equal(dice.rolls.length, 300);
     });
 
-    it('caps n-sided die sides at 1000', function () {
+    it('caps n-sided die sides at 300', function () {
         var dice = new Dice("1d1001");
         dice.execute();
 
-        assert.equal(dice.rolls[0].sides, 1000);
+        assert.equal(dice.rolls[0].sides, 300);
     });
 
-    it('caps fudge die rolls at 100', function () {
-        var dice = new Dice("150df");
+    it('caps fudge die rolls at 300', function () {
+        var dice = new Dice("350df");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 100);
+        assert.equal(dice.rolls.length, 300);
     });
 
     it('keeps highest dice', function () {
