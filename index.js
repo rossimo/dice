@@ -10,7 +10,7 @@ app.use(koaBody());
 
 var router = koaRouter();
 var advertisement = process.env.AD ||
-    'Thanks for being a part of RPG Talk! If you\`d like to help support development for the community, ' +
+    'Thanks for being a part of RPG Talk! If you\'d like to help support development for the community, ' +
     'become a patron at https://www.patreon.com/rpg_talk.';
 var skip = JSON.parse(process.env.SKIP_AD || '[]');
 
