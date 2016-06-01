@@ -29,7 +29,7 @@ router.post('/', function *() {
         text: response
     };
 
-    if (!_.contains(skip, user)) {
+    if (!_.includes(skip, user)) {
         request.post(this.request.body.response_url, {
             text: advertisement
         });
