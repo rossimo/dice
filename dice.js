@@ -178,17 +178,44 @@ Dice.prototype.execute = function () {
             case "*":
             case "/":
             case "d":
+                var b = self.stack.pop();
+                var a = self.stack.pop();
+                console.log(c + ':');
+                console.log(' ', a);
+                console.log(' ', b);
+
+                var r = self.operator[c](a, b);
+                self.stack.push(r);
+                console.log('  =', r);
+                break;
             case "kh":
             case "kl":
             case "k":
                 var b = self.stack.pop();
                 var a = self.stack.pop();
-                self.stack.push(self.operator[c](a, b));
+
+                if (a instanceof Roll) {
+                    self.stack.push(a);
+                    a = undefined;
+                }
+
+                console.log(c + ':');
+                console.log(' ', a);
+                console.log(' ', b);
+
+                var r = self.operator[c](a, b);
+                self.stack.push(r);
+                console.log('  =', r);
                 break;
             case "!":
             case "df":
                 var a = self.stack.pop();
-                self.stack.push(self.operator[c](a));
+                console.log(c + ':');
+                console.log(' ', a);
+
+                var r = self.operator[c](a);
+                self.stack.push(r);
+                console.log('  =', r);
                 break;
             default:
                 self.stack.push(new Integer(parseInt(c)));

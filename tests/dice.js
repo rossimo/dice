@@ -130,4 +130,11 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 13);
     });
+
+    it('shorthand works on complex commands', function () {
+        var dice = new Dice("1d20+3d6k", () => 1);
+        dice.execute();
+
+        assert.equal(dice.result(), 2);
+    });
 });
