@@ -186,7 +186,7 @@ Dice.prototype.execute = function () {
 
                 var r = self.operator[c](a, b);
                 self.stack.push(r);
-                console.log('  =', r);
+                console.log('  =', r, '\n');
                 break;
             case "kh":
             case "kl":
@@ -194,7 +194,7 @@ Dice.prototype.execute = function () {
                 var b = self.stack.pop();
                 var a = self.stack.pop();
 
-                if (a instanceof Roll) {
+                if (a instanceof Roll && b instanceof Roll) {
                     self.stack.push(a);
                     a = undefined;
                 }
@@ -205,7 +205,7 @@ Dice.prototype.execute = function () {
 
                 var r = self.operator[c](a, b);
                 self.stack.push(r);
-                console.log('  =', r);
+                console.log('  =', r, '\n');
                 break;
             case "!":
             case "df":
@@ -215,7 +215,7 @@ Dice.prototype.execute = function () {
 
                 var r = self.operator[c](a);
                 self.stack.push(r);
-                console.log('  =', r);
+                console.log('  =', r, '\n');
                 break;
             default:
                 self.stack.push(new Integer(parseInt(c)));
