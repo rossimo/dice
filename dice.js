@@ -19,6 +19,8 @@ lexer.addRule(/df/, lexeme => lexeme);
 lexer.addRule(/kh/, lexeme => lexeme);
 lexer.addRule(/kl/, lexeme => lexeme);
 lexer.addRule(/k/, lexeme => lexeme);
+lexer.addRule(/b/, lexeme => lexeme);
+lexer.addRule(/w/, lexeme => lexeme);
 
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
@@ -55,6 +57,8 @@ var parser = new Parser({
     "kh": second,
     "kl": second,
     "k": second,
+    "b": second,
+    "w": second,
     "!": second,
     "*": third,
     "/": third,
@@ -157,6 +161,8 @@ var Dice = function (command, rng) {
     };
 
     self.operator.k = self.operator.kh;
+    self.operator.b = self.operator.kh;
+    self.operator.w = self.operator.kl;
 };
 
 Dice.prototype.roll = function (min, max) {
@@ -191,6 +197,8 @@ Dice.prototype.execute = function () {
             case "kh":
             case "kl":
             case "k":
+            case "b":
+            case "w":
                 var b = self.stack.pop();
                 var a = self.stack.pop();
 

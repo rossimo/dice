@@ -115,6 +115,22 @@ describe('Dice', function () {
         assert.equal(dice.result(), 4);
     });
 
+    it('autocompletes bucketed dice', function () {
+        var rng = [6, 1].reverse();
+        var dice = new Dice("2d6b", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 6);
+    });
+
+    it('autocompletes worse dice', function () {
+        var rng = [6, 1].reverse();
+        var dice = new Dice("2d6w", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 1);
+    });
+
     it('keeps low for fudge dice', function () {
         var rng = [-1, 0, 1].reverse();
         var dice = new Dice("3dfkl", () => rng.pop());
