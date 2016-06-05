@@ -21,8 +21,8 @@ router.post('/', function *() {
     var command = this.request.body.text;
     console.log(user + ' in ' + channel + ' rolled ' + command);
 
-    var response;
-    var fields;
+    var response = '';
+    var fields = [];
 
     try {
         var dice = new Dice(command);
@@ -44,12 +44,11 @@ router.post('/', function *() {
         console.log(error.stack);
     }
 
+    var attachments = [{text: response}].concat(fields);
+
     this.body = {
         response_type: 'in_channel',
-        attachments: {
-            text: response,
-            fields: fields
-        }
+        attachments: attachments
     };
 
     var now = new Date();
