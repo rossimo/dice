@@ -44,11 +44,10 @@ router.post('/', function *() {
         console.log(error.stack);
     }
 
-    var attachments = [{text: response}].concat(fields);
-
     this.body = {
         response_type: 'in_channel',
-        attachments: attachments
+        text: response,
+        attachments: fields
     };
 
     var now = new Date();
