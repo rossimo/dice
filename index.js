@@ -32,11 +32,11 @@ router.post('/', function *() {
         response = '@' + user + ' rolled *' + result + '*';
         fields = [{
             title: 'Dice',
-            value: command,
+            text: command,
             short: true
         }, {
             title: 'Rolls',
-            value: rolls,
+            text: rolls,
             short: true
         }]
     } catch (error) {
