@@ -77,9 +77,10 @@ var Integer = function (value) {
     this.value = value;
 };
 
-var Roll = function (sides, value) {
-    this.sides = sides;
-    this.value = value;
+var Roll = function (min, max) {
+    this.min = min;
+    this.max = max;
+    this.sides = max - min + 1;
     this.dice = [];
 };
 
@@ -100,8 +101,8 @@ var Dice = function (command, rng) {
             count = Math.max(Math.min(count.value, 300), 1);
             sides = Math.max(Math.min(sides.value, 300), 1);
 
-            var roll = new Roll(sides);
-            roll.dice = _.range(count).map(() => self.roll(1, sides));
+            var roll = new Roll(1, sides);
+            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
 
             return roll;
@@ -109,24 +110,24 @@ var Dice = function (command, rng) {
         "df": function (count) {
             count = Math.max(Math.min(count.value, 300), 1);
 
-            var roll = new Roll(3);
-            roll.dice = _.range(count).map(() => self.roll(-1, 1));
+            var roll = new Roll(-1, 1);
+            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
 
             return roll;
         },
         "!": function (roll) {
-            var explosions = roll.dice.filter(die => die === roll.sides).length;
+            var explosions = roll.dice.filter(die => die === roll.max).length;
 
             while (explosions > 0 && roll.dice.length < 300) {
-                var extraRoll = new Roll(roll.sides);
-                extraRoll.dice = _.range(explosions).map(() => self.roll(1, extraRoll.sides));
+                var extraRoll = new Roll(roll.min, roll.max);
+                extraRoll.dice = _.range(explosions).map(() => self.roll(extraRoll.min, extraRoll.max));
                 extraRoll.value = extraRoll.dice.reduce((x, y) => x + y);
 
                 roll.value += extraRoll.value;
                 roll.dice = roll.dice.concat(extraRoll.dice);
 
-                explosions = extraRoll.dice.filter(die => die === roll.sides).length;
+                explosions = extraRoll.dice.filter(die => die === roll.max).length;
             }
 
             return roll;

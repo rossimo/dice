@@ -15,7 +15,7 @@ describe('Dice', function () {
 
         var roll = dice.stack.pop();
         assert.equal(roll.value, 3);
-        assert.equal(roll.sides, 6);
+        assert.equal(roll.max, 6);
         assert.equal(roll.dice.length, 1);
     });
 
@@ -54,7 +54,7 @@ describe('Dice', function () {
         assert.equal(dice.rolls.length, 300);
     });
 
-    it('caps n-sided die sides at 300', function () {
+    it('caps n-sided die max at 300', function () {
         var dice = new Dice("1d1001");
         dice.execute();
 
@@ -93,7 +93,7 @@ describe('Dice', function () {
         assert.equal(dice.result(), 30);
     });
 
-    it('autocompletes keep high operator to 1', function () {
+    it('autocompletes keep max operator to 1', function () {
         var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kh+3", () => rng.pop());
         dice.execute();
@@ -147,6 +147,14 @@ describe('Dice', function () {
         dice.execute();
 
         assert.equal(dice.result(), 13);
+    });
+
+    it('explodes fudge dice', function () {
+        var rng = [1, 0].reverse();
+        var dice = new Dice("1df!", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 1);
     });
 
     it('shorthand works on complex commands', function () {
