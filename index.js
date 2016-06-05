@@ -46,8 +46,10 @@ router.post('/', function *() {
 
     this.body = {
         response_type: 'in_channel',
-        text: response,
-        fields: fields
+        attachments: {
+            text: response,
+            fields: fields
+        }
     };
 
     var now = new Date();
