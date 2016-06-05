@@ -120,14 +120,14 @@ var Dice = function (command, rng) {
             var explosions = roll.dice.filter(die => die === roll.max).length;
 
             while (explosions > 0 && roll.dice.length < 300) {
-                var extraRoll = new Roll(roll.min, roll.max);
-                extraRoll.dice = _.range(explosions).map(() => self.roll(extraRoll.min, extraRoll.max));
-                extraRoll.value = extraRoll.dice.reduce((x, y) => x + y);
+                var extra = new Roll(roll.min, roll.max);
+                extra.dice = _.range(explosions).map(() => self.roll(extra.min, extra.max));
+                extra.value = extra.dice.reduce((x, y) => x + y);
 
-                roll.value += extraRoll.value;
-                roll.dice = roll.dice.concat(extraRoll.dice);
+                roll.value += extra.value;
+                roll.dice = roll.dice.concat(extra.dice);
 
-                explosions = extraRoll.dice.filter(die => die === roll.max).length;
+                explosions = extra.dice.filter(die => die === roll.max).length;
             }
 
             return roll;

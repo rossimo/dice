@@ -18,7 +18,7 @@ router.post('/', function *() {
     var user = this.request.body.user_name;
     var channel = this.request.body.channel_name;
 
-    var command = this.request.body.text;
+    var command = this.request.body.text.toLowerCase();
     console.log(user + ' in ' + channel + ' rolled ' + command);
 
     var response = '';
