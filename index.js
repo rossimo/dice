@@ -38,7 +38,15 @@ router.post('/', function *() {
             title: 'Rolls',
             value: rolls.join(' '),
             short: true
-        }]
+        }];
+
+        if (dice.kept.length > 0) {
+            fields.push({
+                title: 'Kept',
+                value: dice.kept.join(' '),
+                short: true
+            });
+        }
     } catch (error) {
         response = 'Unable to roll "' + command + '"\n' + error.message;
         console.log(error.stack);

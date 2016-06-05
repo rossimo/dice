@@ -80,6 +80,8 @@ describe('Dice', function () {
         var dice = new Dice("3d20kh2", () => rng.pop());
         dice.execute();
 
+        assert.equal(dice.kept[0], 19);
+        assert.equal(dice.kept[1], 11);
         assert.equal(dice.result(), 30);
     });
 

@@ -77,16 +77,17 @@ var Integer = function (value) {
     this.value = value;
 };
 
-var Roll = function (sides, value, rolls) {
+var Roll = function (sides, value) {
     this.sides = sides;
     this.value = value;
-    this.dice = rolls || [];
+    this.dice = [];
 };
 
 var Dice = function (command, rng) {
     var self = this;
     self.rolls = [];
     self.stack = [];
+    self.kept = [];
     self.command = command;
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
@@ -136,6 +137,7 @@ var Dice = function (command, rng) {
             var keep = arguments.shift() || new Integer(1);
 
             var kept = roll.dice.sort((l, r) => l < r).slice(0, keep.value);
+            self.kept = self.kept.concat(kept);
             return new Integer(kept.reduce((x, y) => x + y));
         },
         "kl": function () {
@@ -144,6 +146,7 @@ var Dice = function (command, rng) {
             var keep = arguments.shift() || new Integer(1);
 
             var kept = roll.dice.sort().slice(0, keep.value);
+            self.kept = self.kept.concat(kept);
             return new Integer(kept.reduce((x, y) => x + y));
         },
         "+": function (a, b) {
