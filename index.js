@@ -36,7 +36,7 @@ router.post('/', function *() {
             short: true
         }, {
             title: 'Rolls',
-            text: rolls,
+            text: rolls.join(' '),
             short: true
         }]
     } catch (error) {
