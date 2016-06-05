@@ -22,13 +22,23 @@ router.post('/', function *() {
     console.log(user + ' in ' + channel + ' rolled ' + command);
 
     var response;
+    var fields;
 
     try {
         var dice = new Dice(command);
         dice.execute();
         var result = dice.result();
         var rolls = dice.rolls.map((die) => die.result);
-        response = rolls + ' = ' + result;
+        response = '@' + user + ' rolled *' + result + '*';
+        fields = [{
+            title: 'Dice',
+            value: command,
+            short: true
+        }, {
+            title: 'Rolls',
+            value: rolls,
+            short: true
+        }]
     } catch (error) {
         response = 'Unable to roll "' + command + '"\n' + error.message;
         console.log(error.stack);
@@ -36,7 +46,8 @@ router.post('/', function *() {
 
     this.body = {
         response_type: 'in_channel',
-        text: response
+        text: response,
+        fields: fields
     };
 
     var now = new Date();
