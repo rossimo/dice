@@ -46,10 +46,10 @@ router.post('/', function *() {
 
     this.body = {
         response_type: 'in_channel',
-        attachments: {
+        attachments: [{
             text: response,
             fields: fields
-        }
+        }]
     };
 
     var now = new Date();
