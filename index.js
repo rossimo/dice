@@ -48,7 +48,8 @@ router.post('/', function *() {
         response_type: 'in_channel',
         attachments: [{
             text: response,
-            fields: fields
+            fields: fields,
+            mrkdwn_in: ['text']
         }]
     };
 
