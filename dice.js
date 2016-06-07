@@ -94,7 +94,7 @@ var Dice = function (command, rng) {
 
     self.operator = {
         "d": function () {
-            var arguments = Array.from(arguments).filter(arg => arg !== undefined);
+            var arguments = Array.from(arguments);
             var count = arguments.shift() || new Integer(1);
             var sides = arguments.shift() || new Integer(6);
 

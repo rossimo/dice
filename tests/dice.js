@@ -19,6 +19,16 @@ describe('Dice', function () {
         assert.equal(roll.dice.length, 1);
     });
 
+    it('infers 1 for left operand of XdY when missing', function () {
+        var dice = new Dice("d6", () => 3);
+        dice.execute();
+
+        var roll = dice.stack.pop();
+        assert.equal(roll.value, 3);
+        assert.equal(roll.max, 6);
+        assert.equal(roll.dice.length, 1);
+    });
+
     it('rolls correct number of fudge dice', function () {
         var dice = new Dice("4df");
         dice.execute();
