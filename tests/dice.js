@@ -6,7 +6,7 @@ describe('Dice', function () {
         var dice = new Dice("3d20");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 3);
+        assert.equal(dice.rolls().length, 3);
     });
 
     it('infers 1d6 when operands are missing', function () {
@@ -33,7 +33,7 @@ describe('Dice', function () {
         var dice = new Dice("4df");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 4);
+        assert.equal(dice.rolls().length, 4);
     });
 
     it('follows pre-seeded RNG for tests', function () {
@@ -61,28 +61,28 @@ describe('Dice', function () {
         var dice = new Dice("350d20");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 300);
+        assert.equal(dice.rolls().length, 300);
     });
 
     it('caps n-sided die max at 300', function () {
         var dice = new Dice("1d1001");
         dice.execute();
 
-        assert.equal(dice.rolls[0].sides, 300);
+        assert.equal(dice.groups[0].sides, 300);
     });
 
     it('caps fudge die rolls at 300', function () {
         var dice = new Dice("350df");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 300);
+        assert.equal(dice.rolls().length, 300);
     });
 
     it('caps exploding dice at 300', function () {
         var dice = new Dice("1d1!");
         dice.execute();
 
-        assert.equal(dice.rolls.length, 300);
+        assert.equal(dice.rolls().length, 300);
     });
 
     it('keeps highest dice', function () {

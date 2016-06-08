@@ -77,20 +77,22 @@ var Integer = function (value) {
     this.value = value;
 };
 
-var Roll = function (min, max) {
-    this.min = min;
-    this.max = max;
-    this.sides = max - min + 1;
-    this.dice = [];
-};
-
 var Dice = function (command, rng) {
     var self = this;
-    self.rolls = [];
+    self.groups = [];
     self.stack = [];
     self.kept = [];
-    self.command = command;
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
+    self.command = command;
+
+    self.Roll = function (count, min, max) {
+        this.min = min;
+        this.max = max;
+        this.sides = max - min + 1;
+        this.dice = _.range(count).map(() => self.rng(min, max));
+        this.value = this.dice.reduce((x, y) => x + y);
+        self.groups.push(this);
+    };
 
     self.operator = {
         "d": function () {
@@ -101,28 +103,18 @@ var Dice = function (command, rng) {
             count = Math.max(Math.min(count.value, 300), 1);
             sides = Math.max(Math.min(sides.value, 300), 1);
 
-            var roll = new Roll(1, sides);
-            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
-            roll.value = roll.dice.reduce((x, y) => x + y);
-
-            return roll;
+            return new self.Roll(count, 1, sides);
         },
         "df": function (count) {
             count = Math.max(Math.min(count.value, 300), 1);
 
-            var roll = new Roll(-1, 1);
-            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
-            roll.value = roll.dice.reduce((x, y) => x + y);
-
-            return roll;
+            return new self.Roll(count, -1, 1);
         },
         "!": function (roll) {
             var explosions = roll.dice.filter(die => die === roll.max).length;
 
             while (explosions > 0 && roll.dice.length < 300) {
-                var extra = new Roll(roll.min, roll.max);
-                extra.dice = _.range(explosions).map(() => self.roll(extra.min, extra.max));
-                extra.value = extra.dice.reduce((x, y) => x + y);
+                var extra = new self.Roll(explosions, roll.min, roll.max);
 
                 roll.value += extra.value;
                 roll.dice = roll.dice.concat(extra.dice);
@@ -169,15 +161,6 @@ var Dice = function (command, rng) {
     self.operator.w = self.operator.kl;
 };
 
-Dice.prototype.roll = function (min, max) {
-    var die = {
-        result: this.rng(min, max),
-        sides: max - min + 1
-    };
-    this.rolls.push(die);
-    return die.result;
-};
-
 Dice.prototype.execute = function () {
     var self = this;
 
@@ -206,7 +189,7 @@ Dice.prototype.execute = function () {
                 var b = self.stack.pop();
                 var a = self.stack.pop();
 
-                if (a instanceof Roll && b instanceof Roll) {
+                if (a instanceof self.Roll && b instanceof self.Roll) {
                     self.stack.push(a);
                     a = undefined;
                 }
@@ -234,6 +217,10 @@ Dice.prototype.execute = function () {
                 break;
         }
     });
+};
+
+Dice.prototype.rolls = function () {
+    return _.flatten(this.groups.map(group => group.dice));
 };
 
 Dice.prototype.result = function () {
