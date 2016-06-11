@@ -42,7 +42,7 @@ router.post('/', function *() {
 
         if (dice.kept.length > 0) {
             fields.push({
-                title: 'Kept',
+                title: 'Kept: ' + dice.kept.length,
                 value: dice.kept.join(' '),
                 short: true
             });
