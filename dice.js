@@ -22,6 +22,7 @@ lexer.addRule(/k/, lexeme => lexeme);
 lexer.addRule(/b/, lexeme => lexeme);
 lexer.addRule(/w/, lexeme => lexeme);
 lexer.addRule(/>/, lexeme => lexeme);
+lexer.addRule(/e/, lexeme => lexeme);
 
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
@@ -62,6 +63,7 @@ var parser = new Parser({
     "b": second,
     "w": second,
     "!": second,
+    "e": second,
     "*": third,
     "/": third,
     "+": fourth,
@@ -161,6 +163,15 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.length);
         },
+        "e": function () {
+            var arguments = Array.from(arguments).filter(arg => arg !== undefined);
+            var roll = arguments.shift();
+            var keep = arguments.shift();
+
+            var kept = roll.dice.filter(die => die === keep.value);
+            self.kept = self.kept.concat(kept);
+            return new Integer(kept.length);
+        },
         "+": function (a, b) {
             return new Integer(a.value + b.value);
         },
@@ -215,6 +226,7 @@ Dice.prototype.execute = function () {
             case "b":
             case "w":
             case ">":
+            case "e":
                 var b = self.stack.pop();
                 var a = self.stack.pop();
 
