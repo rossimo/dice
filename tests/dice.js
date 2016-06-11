@@ -189,4 +189,12 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 4);
     });
+
+    it('allows integer arithmetic anywhere', function () {
+        var rng = [10, 2, 4].reverse();
+        var dice = new Dice("1d20+2+2d6kh", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 16);
+    });
 });

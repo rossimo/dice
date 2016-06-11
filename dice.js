@@ -221,6 +221,9 @@ Dice.prototype.execute = function () {
                 if (a instanceof Roll && b instanceof Roll) {
                     self.stack.push(a);
                     a = undefined;
+                } else if (a instanceof Integer && b instanceof Roll) {
+                    self.stack.push(a);
+                    a = undefined;
                 }
 
                 console.log(c + ':');
