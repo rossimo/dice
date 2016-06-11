@@ -148,7 +148,7 @@ var Dice = function (command, rng) {
             var roll = arguments.shift();
             var keep = arguments.shift() || new Integer(1);
 
-            var kept = roll.dice.sort().slice(0, keep.value);
+            var kept = roll.dice.sort((l, r) => l > r).slice(0, keep.value);
             self.kept = self.kept.concat(kept);
             return new Integer(kept.reduce((x, y) => x + y));
         },

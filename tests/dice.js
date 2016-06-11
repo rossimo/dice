@@ -119,6 +119,14 @@ describe('Dice', function () {
         assert.equal(dice.result(), 12);
     });
 
+    it('keeps lowest dice, again', function () {
+        var rng = [7, 13].reverse();
+        var dice = new Dice("2d30kl", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 7);
+    });
+
     it('autocompletes keep low operator to 1', function () {
         var rng = [11, 19, 1].reverse();
         var dice = new Dice("3d20kl+3", () => rng.pop());
