@@ -173,4 +173,12 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 2);
     });
+
+    it('count successes', function () {
+        var rng = [4, 3, 6].reverse();
+        var dice = new Dice("3d6>3+2", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 4);
+    });
 });
