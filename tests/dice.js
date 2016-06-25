@@ -198,11 +198,27 @@ describe('Dice', function () {
         assert.equal(dice.result(), 16);
     });
 
-    it('searches foe equal dice', function () {
-        var rng = [1,2, 3, 3, 4, 5].reverse();
+    it('searches for equal dice', function () {
+        var rng = [1, 2, 3, 3, 4, 5].reverse();
         var dice = new Dice("6d6e3", () => rng.pop());
         dice.execute();
 
         assert.equal(dice.result(), 2);
+    });
+
+    it('rolls star wars ability', function () {
+        var rng = [0, 1, 2, 3].reverse();
+        var dice = new Dice("4swa", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 4);
+    });
+
+    it('rolls star wars difficulty', function () {
+        var rng = [0, 1, 2, 3].reverse();
+        var dice = new Dice("4swd", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), -4);
     });
 });
