@@ -166,13 +166,7 @@ var Dice = function (command, rng) {
             var roll = new Roll(0, sides.length - 1);
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max)).map(result => sides[result]);
             roll.value = _.flatten(roll.dice).map(result => result.value).reduce((x, y) => x + y);
-            roll.results = _.flatten(roll.dice).reduce((x, y) => ({
-                value: x.value + y.value,
-                consequence: x.consequence + y.consequence,
-                sideEffect: x.sideEffect + y.sideEffect
-            }));
-
-            self.starwars.push(roll);
+            self.starwars = self.starwars.concat(roll.dice);
             return roll;
         },
         "!": function (roll) {
@@ -328,6 +322,70 @@ Dice.prototype.execute = function () {
                 break;
         }
     });
+};
+
+Dice.prototype.onlyStarWars = function () {
+    return this.rolls.length > 0 && this.rolls.length === this.starwars.length;
+};
+
+Dice.prototype.starWarsResult = function () {
+    if (this.onlyStarWars()) {
+        var result = _.flatten(this.starwars).reduce((x, y) => ({
+            value: x.value + y.value,
+            consequence: x.consequence + y.consequence,
+            sideEffect: x.sideEffect + y.sideEffect
+        }));
+
+        var pl = (count, suffix) => Math.abs(count) > 1 ? suffix : '';
+
+        var descriptions = [];
+
+        var value = result.value;
+        if (value !== 0) {
+            descriptions.push(Math.abs(value) + ' ' +
+                (value > 0 ? 'Success' + pl(value, 'es') : 'Failure' + pl(value, 's')));
+        }
+
+        var consequence = result.consequence;
+        if (result.consequence !== 0) {
+            descriptions.push(Math.abs(consequence) + ' ' +
+                (consequence > 0 ? 'Triumph' + pl(consequence, 's') : 'Despairs' + pl(consequence, 's')));
+        }
+
+        var sideEffect = result.sideEffect;
+        if (sideEffect !== 0) {
+            descriptions.push(Math.abs(sideEffect) + ' ' +
+                (sideEffect > 0 ? 'Advantage' + pl(sideEffect, 's') : 'Threat' + pl(sideEffect, 's')));
+        }
+
+        result.description = descriptions.length > 0 ? descriptions.join(', ') : 'No effect';
+
+        result.faces = this.starwars
+            .map(face => {
+                var names = [];
+                var repeat = (count, value) => names.push(new Array(Math.abs(count) + 1).join(value));
+
+                face.forEach(effect => {
+                    if (effect.value > 0) repeat(effect.value, 'Success');
+                    else if (effect.value < 0) repeat(effect.value, 'Failure');
+
+                    if (effect.consequence > 0) repeat(effect.consequence, 'Triumph');
+                    else if (effect.consequence < 0) repeat(effect.consequence, 'Despair');
+
+                    if (effect.sideEffect > 0) repeat(effect.sideEffect, 'Advantage');
+                    else if (effect.sideEffect < 0) repeat(effect.sideEffect, 'Threat');
+                });
+
+                return names;
+            })
+            .map(names => names.length > 0 ? '(' + names.join(', ') + ')' : '')
+            .filter(name => name.length > 0)
+            .join(', ');
+
+        return result;
+    } else {
+        return undefined;
+    }
 };
 
 Dice.prototype.result = function () {

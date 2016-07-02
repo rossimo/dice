@@ -204,6 +204,7 @@ describe('Dice', function () {
         dice.execute();
 
         assert.equal(dice.result(), 2);
+        assert.equal(dice.starWarsResult(), undefined);
     });
 
     it('rolls star wars ability', function () {
@@ -212,6 +213,10 @@ describe('Dice', function () {
         dice.execute();
 
         assert.equal(dice.result(), 4);
+        var starWars = dice.starWarsResult();
+        assert.equal(starWars.consequence, 0);
+        assert.equal(starWars.sideEffect, 2);
+        assert.equal(starWars.value, 4);
     });
 
     it('rolls star wars difficulty', function () {
@@ -220,5 +225,21 @@ describe('Dice', function () {
         dice.execute();
 
         assert.equal(dice.result(), -4);
+        var starWars = dice.starWarsResult();
+        assert.equal(starWars.consequence, 0);
+        assert.equal(starWars.sideEffect, -2);
+        assert.equal(starWars.value, -4);
+    });
+
+    it('rolls star wars ability and difficulty mix', function () {
+        var rng = [0, 1, 2, 3, 0, 1, 2, 3].reverse();
+        var dice = new Dice("4swa+4swd", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 0);
+        var starWars = dice.starWarsResult();
+        assert.equal(starWars.consequence, 0);
+        assert.equal(starWars.sideEffect, 0);
+        assert.equal(starWars.value, 0);
     });
 });

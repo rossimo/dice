@@ -30,22 +30,39 @@ router.post('/', function *() {
         var result = dice.result();
         var rolls = dice.rolls.map((die) => die.result);
         response = '@' + user + ' rolled *' + result + '*';
-        fields = [{
-            title: 'Dice',
-            value: command,
-            short: true
-        }, {
-            title: 'Rolls',
-            value: rolls.join(' '),
-            short: true
-        }];
-
-        if (dice.kept.length > 0) {
+        if (dice.onlyStarWars()) {
+            var starWars = dice.starWarsResult();
             fields.push({
-                title: 'Kept: ' + dice.kept.length,
-                value: dice.kept.join(' '),
+                title: 'Result',
+                value: starWars.description,
                 short: true
             });
+
+            fields.push({
+                title: 'Rolls',
+                value: starWars.faces,
+                short: true
+            });
+        } else {
+            fields.push({
+                title: 'Dice',
+                value: command,
+                short: true
+            });
+
+            fields.push({
+                title: 'Rolls',
+                value: rolls.join(' '),
+                short: true
+            });
+
+            if (dice.kept.length > 0) {
+                fields.push({
+                    title: 'Kept: ' + dice.kept.length,
+                    value: dice.kept.join(' '),
+                    short: true
+                });
+            }
         }
     } catch (error) {
         response = 'Unable to roll "' + command + '"\n' + error.message;
