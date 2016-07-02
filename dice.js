@@ -349,7 +349,7 @@ Dice.prototype.starWarsResult = function () {
         var consequence = result.consequence;
         if (result.consequence !== 0) {
             descriptions.push(Math.abs(consequence) + ' ' +
-                (consequence > 0 ? 'Triumph' + pl(consequence, 's') : 'Despairs' + pl(consequence, 's')));
+                (consequence > 0 ? 'Triumph' + pl(consequence, 's') : 'Despair' + pl(consequence, 's')));
         }
 
         var sideEffect = result.sideEffect;
