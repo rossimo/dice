@@ -31,16 +31,12 @@ router.post('/', function *() {
         var rolls = dice.rolls.map((die) => die.result);
         if (dice.onlyStarWars()) {
             var starWars = dice.starWarsResult();
-            fields.push({
-                title: 'Result',
-                value: starWars.description,
-                short: true
-            });
+            response = '@' + user + ' rolled *' + starWars.description + '*';
 
             fields.push({
                 title: 'Rolls',
                 value: starWars.faces,
-                short: true
+                short: false
             });
         } else {
             response = '@' + user + ' rolled *' + result + '*';
