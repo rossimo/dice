@@ -29,7 +29,6 @@ router.post('/', function *() {
         dice.execute();
         var result = dice.result();
         var rolls = dice.rolls.map((die) => die.result);
-        response = '@' + user + ' rolled *' + result + '*';
         if (dice.onlyStarWars()) {
             var starWars = dice.starWarsResult();
             fields.push({
@@ -44,6 +43,8 @@ router.post('/', function *() {
                 short: true
             });
         } else {
+            response = '@' + user + ' rolled *' + result + '*';
+
             fields.push({
                 title: 'Dice',
                 value: command,
