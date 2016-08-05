@@ -379,7 +379,6 @@ Dice.prototype.starWarsResult = function () {
                 return names;
             })
             .map(names => names.length > 0 ? '(' + names.join(', ') + ')' : '(Nothing)')
-            .filter(name => name.length > 0)
             .join(', ');
 
         return result;
