@@ -44,20 +44,20 @@ router.post('/', function *() {
             fields.push({
                 title: 'Dice',
                 value: command,
-                short: true
+                short: false
             });
 
             fields.push({
                 title: 'Rolls',
                 value: rolls.join(' '),
-                short: true
+                short: false
             });
 
             if (dice.kept.length > 0) {
                 fields.push({
                     title: 'Kept: ' + dice.kept.length,
                     value: dice.kept.join(' '),
-                    short: true
+                    short: false
                 });
             }
         }
