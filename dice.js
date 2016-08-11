@@ -27,6 +27,10 @@ lexer.addRule(/e/, lexeme => lexeme);
 // star wars
 lexer.addRule(/swa/, lexeme => lexeme);
 lexer.addRule(/swd/, lexeme => lexeme);
+lexer.addRule(/swp/, lexeme => lexeme);
+lexer.addRule(/swc/, lexeme => lexeme);
+lexer.addRule(/swb/, lexeme => lexeme);
+lexer.addRule(/sws/, lexeme => lexeme);
 
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
@@ -161,6 +165,54 @@ var Dice = function (command, rng) {
                     [Failure, Failure],
                     []
                 ];
+            } else if (type === "swp") {
+                sides = [
+                    [Advantage, Advantage],
+                    [Advantage],
+                    [Advantage, Advantage],
+                    [Triumph],
+                    [Success],
+                    [Success, Advantage],
+                    [Success],
+                    [Success, Advantage],
+                    [Success, Success],
+                    [Success, Advantage],
+                    [Success, Success],
+                    []
+                ];
+            } else if (type === "swc") {
+                sides = [
+                    [Threat, Threat],
+                    [Threat],
+                    [Threat, Threat],
+                    [Threat],
+                    [Threat, Failure],
+                    [Failure],
+                    [Threat, Failure],
+                    [Failure],
+                    [Failure, Failure],
+                    [Despair],
+                    [Failure, Failure],
+                    []
+                ];
+            } else if (type === "swb") {
+                sides = [
+                    [Threat],
+                    [Threat],
+                    [Failure],
+                    [Failure],
+                    [],
+                    [],
+                ];
+            } else if (type === "sws") {
+                sides = [
+                    [Success],
+                    [Success, Advantage],
+                    [Advantage, Advantage],
+                    [Advantage],
+                    [],
+                    [],
+                ];
             }
 
             var roll = new Roll(0, sides.length - 1);
@@ -240,6 +292,10 @@ var Dice = function (command, rng) {
     self.operator.w = self.operator.kl;
     self.operator.swa = self.operator.starwars;
     self.operator.swd = self.operator.starwars;
+    self.operator.swp = self.operator.starwars;
+    self.operator.swc = self.operator.starwars;
+    self.operator.swb = self.operator.starwars;
+    self.operator.sws = self.operator.starwars;
 };
 
 Dice.prototype.roll = function (min, max) {
@@ -309,6 +365,10 @@ Dice.prototype.execute = function () {
                 break;
             case "swa":
             case "swd":
+            case "swp":
+            case "swc":
+            case "swb":
+            case "sws":
                 var a = self.stack.pop();
                 console.log(c + ':');
                 console.log(' ', a);
