@@ -35,26 +35,26 @@ router.post('/', function *() {
 
             // If the comment exists, add it to the end of the response
             if (dice.comment.length > 0) {
-              response = response.concat(' for ' + dice.comment);
+                response = response.concat(' for ' + dice.comment);
             }
 
             fields.push({
-              title: 'Rolls',
-              value: starWars.faces,
-              short: false
+                title: 'Rolls',
+                value: starWars.faces,
+                short: false
             });
         } else {
             response = '@' + user + ' rolled *' + result + '*';
 
             // If the comment exists, add it to the end of the response
             if (dice.comment.length > 0) {
-              response = response.concat(' for ' + dice.comment);
+                response = response.concat(' for ' + dice.comment);
             }
 
             fields.push({
-              title: 'Dice',
-              value: command,
-              short: false
+                title: 'Dice',
+                value: command,
+                short: false
             });
 
             fields.push({
