@@ -243,24 +243,24 @@ describe('Dice', function () {
         assert.equal(starWars.value, 0);
     });
 
-		it('correctly gets the comment and executes normally', function () {
-        var dice = new Dice("3d20 ;asdf");
-        dice.execute();
+    it('correctly gets the comment and executes normally', function () {
+      var dice = new Dice("3d20 ;asdf");
+      dice.execute();
 
-        assert.equal(dice.rolls.length, 3);
-				assert.equal(dice.comment, 'asdf');
-		});
+      assert.equal(dice.rolls.length, 3);
+      assert.equal(dice.comment, 'asdf');
+    });
 
     it('correctly removes the comment on a star wars ability roll', function () {
-        var rng = [0, 1, 2, 3].reverse();
-        var dice = new Dice("4swa ;asdf", () => rng.pop());
-        dice.execute();
+      var rng = [0, 1, 2, 3].reverse();
+      var dice = new Dice("4swa ;asdf", () => rng.pop());
+      dice.execute();
 
-        assert.equal(dice.result(), 4);
-        var starWars = dice.starWarsResult();
-        assert.equal(starWars.consequence, 0);
-        assert.equal(starWars.sideEffect, 2);
-        assert.equal(starWars.value, 4);
-				assert.equal(dice.comment, 'asdf');
+      assert.equal(dice.result(), 4);
+      var starWars = dice.starWarsResult();
+      assert.equal(starWars.consequence, 0);
+      assert.equal(starWars.sideEffect, 2);
+      assert.equal(starWars.value, 4);
+      assert.equal(dice.comment, 'asdf');
     });
 });
