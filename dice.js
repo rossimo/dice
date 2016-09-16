@@ -309,6 +309,15 @@ Dice.prototype.roll = function (min, max) {
 
 Dice.prototype.execute = function () {
     var self = this;
+		var i = 0;
+
+		// Moves anything after a ';' symbol to a comment field
+		this.comment = "";
+		i = self.command.indexOf(";");
+		if (i >= 0) {
+			self.comment = self.command.substr(i + 1, self.command.length);
+			self.command = self.command.substr(0, i);
+		}
 
     parse(self.command).forEach(function (c) {
         switch (c) {

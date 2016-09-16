@@ -242,4 +242,12 @@ describe('Dice', function () {
         assert.equal(starWars.sideEffect, 0);
         assert.equal(starWars.value, 0);
     });
+
+		it('correctly gets the comment and executes normally', function () {
+        var dice = new Dice("3d20 ;asdf");
+        dice.execute();
+
+        assert.equal(dice.rolls.length, 3);
+				assert.equal(dice.comment, 'asdf');
+		});
 });
