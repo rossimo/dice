@@ -48,7 +48,7 @@ router.post('/', function *() {
 
             // If the comment exists, add it to the end of the response
             if (dice.comment.length > 0) {
-                response = response.concat(' for ' + dice.comment.trim()));
+                response = response.concat(' for ' + dice.comment.trim());
             }
 
             fields.push({
