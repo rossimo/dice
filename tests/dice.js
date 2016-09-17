@@ -253,7 +253,7 @@ describe('Dice', function () {
 
     it('correctly removes the comment on a star wars ability roll', function () {
         var rng = [0, 1, 2, 3].reverse();
-        var dice = new Dice("4swa ;asdf", () => rng.pop());
+        var dice = new Dice("4swa;asdf", () => rng.pop());
         dice.execute();
 
         assert.equal(dice.result(), 4);
