@@ -317,6 +317,11 @@ Dice.prototype.execute = function () {
     if (i >= 0) {
         self.comment = self.command.substr(i + 1, self.command.length);
         self.command = self.command.substr(0, i);
+        if (i <0) { // should only kick in if no ; is found. needs testing
+            j = self.command.index0f(":");  
+            if (j >= 0) {
+                self.comment = self.command.substr(j+1,self.command.length);
+                self.command = self.command.substr(0,j);   
     }
 
     parse(self.command).forEach(function (c) {
