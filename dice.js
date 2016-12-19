@@ -428,6 +428,15 @@ Dice.prototype.execute = function () {
                 self.stack.push(r);
                 console.log('  =', r, '\n');
                 break;
+            case "gm":
+                var a = self.stack.pop();
+                console.log(c + ':');
+                console.log(' ', a);
+
+                var r = self.operator[c](c, a);
+                self.stack.push(r);
+                console.log('  =', r, '\n');
+                break;
             default:
                 self.stack.push(new Integer(parseInt(c)));
                 break;
