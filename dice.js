@@ -308,7 +308,7 @@ var Dice = function (command, rng) {
                     ["Someone has an offer for you"],
                     ["Someone has something you want"],
                     ["It is valuable, but the price is high"],
-                    ["Loose something, or another character is hurt"],
+                    ["Lose something, or another character is hurt"],
                     []
                 ];
             var roll = new Roll(0, sides.length - 1);
@@ -425,6 +425,15 @@ Dice.prototype.execute = function () {
                 console.log(' ', a);
 
                 var r = self.operator[c](c, a);
+                self.stack.push(r);
+                console.log('  =', r, '\n');
+                break;
+            case "gm":
+                var a = self.stack.pop();
+                console.log(c + ':');
+                console.log(' ', a);
+
+                var r = self.operator[c]();
                 self.stack.push(r);
                 console.log('  =', r, '\n');
                 break;
