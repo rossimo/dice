@@ -263,4 +263,10 @@ describe('Dice', function () {
         assert.equal(starWars.value, 4);
         assert.equal(dice.comment, 'asdf');
     });
+      it('checks output of gm dice is a string', function () {  // test this test works
+        var dice = new Dice("gm");
+        dice.execute();
+                 
+        assert.equal(typeof dice.result() , "string");
+    });
 });
