@@ -32,6 +32,9 @@ lexer.addRule(/swc/, lexeme => lexeme);
 lexer.addRule(/swb/, lexeme => lexeme);
 lexer.addRule(/sws/, lexeme => lexeme);
 
+// game master
+lexer.addRule(/gm/, lexeme => lexeme);
+
 // digits
 lexer.addRule(/[0-9]+/, lexeme => lexeme);
 
@@ -81,6 +84,7 @@ var parser = new Parser({
     "e": second,
     "swa": second,
     "swd": second,
+    "gm": second,
     "*": third,
     "/": third,
     "+": fourth,
@@ -273,6 +277,44 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.length);
         },
+        "gm": function () {
+            var sides = [
+                    ["Separate them"],
+                    ["Put them together"],
+                    ["Show their connection"],
+                    ["Show their connection increasing"],
+                    ["Show their connection strained"],
+                    ["The weather obstructs you"],
+                    ["The landscape obstructs you"],
+                    ["The enviroment obstructs you"],
+                    ["A beast obstructs you"],
+                    ["An NPC obstructs you"],
+                    ["Your past obstructs you"],
+                    ["Your equipment obstructs you"],
+                    ["An old friend makes contact"],
+                    ["An old enemy reappears"],
+                    ["Something bad on the horizon"],
+                    ["Something you believe in happens"],
+                    ["Something good happens"],
+                    ["Something useful happens"],
+                    ["You lose some equipment"],
+                    ["You lose a resource"],
+                    ["You find a trap"],
+                    ["Tensions escalate"],
+                    ["Show what your character is good at"],
+                    ["Show what your character likes"],
+                    ["Show what your character thinks of another character"],
+                    ["Someone has a job for you"],
+                    ["Someone has an offer for you"],
+                    ["Someone has something you want"],
+                    ["It is valuable, but the price is high"],
+                    ["Lose something, or another character is hurt"],
+                    []
+                ];
+            var roll = new Roll(0, sides.length - 1);
+            return sides[roll];
+        },           
+        
         "+": function (a, b) {
             return new Integer(a.value + b.value);
         },
@@ -383,6 +425,15 @@ Dice.prototype.execute = function () {
                 console.log(' ', a);
 
                 var r = self.operator[c](c, a);
+                self.stack.push(r);
+                console.log('  =', r, '\n');
+                break;
+            case "gm":
+                var a = self.stack.pop();
+                console.log(c + ':');
+                console.log(' ', a);
+
+                var r = self.operator[c]();
                 self.stack.push(r);
                 console.log('  =', r, '\n');
                 break;
