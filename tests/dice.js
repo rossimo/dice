@@ -265,8 +265,9 @@ describe('Dice', function () {
     });
       it('checks output of gm dice is a string', function () {  // test this test works
         var dice = new Dice("gm");
-        dice.execute();
-                 
+        var testexample = "thisisastring"
+          dice.execute();
+        assert.equal(typeof "thisisastring" , "string");          
         assert.equal(typeof dice.result() , "string");
     });
 });
