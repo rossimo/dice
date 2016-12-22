@@ -30,7 +30,7 @@ lexer.addRule(/w/, lexeme => lexeme);
 lexer.addRule(/>/, lexeme => lexeme);
 lexer.addRule(/e/, lexeme => lexeme);
 
-// star wars
+// star wars 
 lexer.addRule(/swa/, lexeme => lexeme);
 lexer.addRule(/swd/, lexeme => lexeme);
 lexer.addRule(/swp/, lexeme => lexeme);
