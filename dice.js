@@ -332,7 +332,8 @@ var Dice = function (command, rng) {
                     []
                 ];
             var roll = new Roll(0, sides.length - 1);
-            return sides[roll];
+            self.comment = sides[roll] + " " + self.comment
+            return roll;
         },           
         
         "+": function (a, b) {
@@ -452,7 +453,6 @@ Dice.prototype.execute = function () {
                 break;
             case "gm":
                 console.log(c + ':');
-               
                 var r = self.operator[c]();
                 self.stack.push(r);
                 console.log('  =', r, '\n');
