@@ -334,7 +334,13 @@ var Dice = function (command, rng) {
             var roll = new Roll(0, sides.length - 1);
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
-            self.comment = sides[roll] + " " + self.comment
+            self.comment = sides[roll.value] + " " + self.comment
+            return roll;
+            
+             var roll = new Roll(1, sides);
+            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
+            roll.value = roll.dice.reduce((x, y) => x + y);
+
             return roll;
         },           
         
