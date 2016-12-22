@@ -332,6 +332,7 @@ var Dice = function (command, rng) {
                     []
                 ];
             var roll = new Roll(0, sides.length - 1);
+            var count = arguments.shift() || new Integer(1);
             count = Math.max(Math.min(count.value, 10), 1);  // no more then 10 gm results to not gum up screen with text
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
