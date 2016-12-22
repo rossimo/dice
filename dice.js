@@ -332,7 +332,8 @@ var Dice = function (command, rng) {
                     []
                 ];
             var roll = new Roll(0, sides.length - 1);
-            return sides[roll];
+            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max)).map(result => sides[result]);
+            return roll;
         },           
         
         "+": function (a, b) {
@@ -530,5 +531,7 @@ Dice.prototype.starWarsResult = function () {
 Dice.prototype.result = function () {
     return this.stack[0].value;
 };
+
+
 
 module.exports = Dice;
