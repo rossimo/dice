@@ -352,7 +352,7 @@ var Dice = function (command, rng) {
         }
     };
 
-    // a tidy up block to allow multiple intutiive shortforms summon the same function
+    // a tidy up block to allow multiple intutiive shortforms summon the same function 
     self.operator.k = self.operator.kh;
     self.operator.b = self.operator.kh;
     self.operator.w = self.operator.kl;
