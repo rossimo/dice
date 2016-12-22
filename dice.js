@@ -297,7 +297,7 @@ var Dice = function (command, rng) {
             return new Integer(kept.length);
         },
         // not currently working
-        "gm": function () {
+        "gm": function (count) {
             var sides = [
                     ["Separate them"],
                     ["Put them together"],
@@ -331,9 +331,12 @@ var Dice = function (command, rng) {
                     ["Lose something, or another character is hurt"],
                     []
                 ];
+            
+            count = Math.max(Math.min(count.value, 1), 1);
+
+            var roll = new Roll(-1, 1);
+                        
             var roll = new Roll(0, sides.length - 1);
-            var count = new Integer(1);
-            count = Math.max(Math.min(count.value, 10), 1);  // no more then 10 gm results to not gum up screen with text
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
             self.comment = sides[roll.value] + " " + self.comment
@@ -456,8 +459,11 @@ Dice.prototype.execute = function () {
                 console.log('  =', r, '\n');
                 break;
             case "gm":
+                var a = self.stack.pop();
                 console.log(c + ':');
-                var r = self.operator[c]();
+                console.log(' ', a);
+
+                var r = self.operator[c](a);
                 self.stack.push(r);
                 console.log('  =', r, '\n');
                 break;
