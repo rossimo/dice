@@ -1,3 +1,9 @@
+// this file does the work of turning input into results
+// for the slack front end work, look at index.js
+// index.js sends the input here to be carved into command and comment
+// command is then turned into results
+// results and comment are sent back to index.js for presentation
+
 var _ = require("lodash");
 var Lexer = require("lex");
 var Parser = require("./parse");
@@ -44,6 +50,7 @@ lexer.addRule(/!/, lexeme => lexeme);
 // arithmetic
 lexer.addRule(/[\(\+\-\*\/\)]/, lexeme => lexeme);
 
+// part of the star wars dice manager
 var Advantage = {value: 0, consequence: 0, sideEffect: 1};
 var Triumph = {value: 1, consequence: 1, sideEffect: 0};
 var Success = {value: 1, consequence: 0, sideEffect: 0};
@@ -51,6 +58,7 @@ var Failure = {value: 0, consequence: 0, sideEffect: -1};
 var Despair = {value: -1, consequence: -1, sideEffect: 0};
 var Threat = {value: -1, consequence: 0, sideEffect: 0};
 
+// part of the aprser. Used to set solution heirachy to ensure 2d6+1 follows bodmas
 var first = {
     precedence: 4,
     associativity: "left"
@@ -71,6 +79,7 @@ var fourth = {
     associativity: "left"
 };
 
+// assigns bodmas heirachy levels to different tokens
 var parser = new Parser({
     "d": first,
     "df": first,
@@ -91,6 +100,9 @@ var parser = new Parser({
     "-": fourth
 });
 
+// this function looks for tokens
+// while there's a token to find it stacks it into tokens[]
+//then parses each one to set the bodmas heirachy
 function parse(input) {
     lexer.setInput(input);
     var tokens = [], token;
@@ -119,13 +131,14 @@ var Dice = function (command, rng) {
     self.rng = rng || ((min, max) => Math.floor(Math.random() * (max - min + 1)) + min);
 
     self.operator = {
-        "d": function () {
+        // "d" is for standard XdY format dice
+        "d": function () {  
             var arguments = Array.from(arguments);
             var count = arguments.shift() || new Integer(1);
             var sides = arguments.shift() || new Integer(6);
 
             count = Math.max(Math.min(count.value, 300), 1);
-            sides = Math.max(Math.min(sides.value, 300), 1);
+            sides = Math.max(Math.min(sides.value, 300), 1); // ideally this would be 1000 to allow the rare game use of d1000
 
             var roll = new Roll(1, sides);
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
@@ -133,7 +146,8 @@ var Dice = function (command, rng) {
 
             return roll;
         },
-        "df": function (count) {
+        // fudge dice. two '-1' sides, two '0' sides and two '+1' sides
+        "df": function (count) {  
             count = Math.max(Math.min(count.value, 300), 1);
 
             var roll = new Roll(-1, 1);
@@ -142,7 +156,7 @@ var Dice = function (command, rng) {
 
             return roll;
         },
-        "starwars": function (type, count) {
+        "starwars": function (type, count) { 
             count = Math.max(Math.min(count.value, 300), 1);
 
             var sides = [];
@@ -225,6 +239,7 @@ var Dice = function (command, rng) {
             self.starwars = self.starwars.concat(roll.dice);
             return roll;
         },
+        // explosive dice. eg if 10 on a d10nnroll an extra dice
         "!": function (roll) {
             var explosions = roll.dice.filter(die => die === roll.max).length;
 
@@ -241,6 +256,7 @@ var Dice = function (command, rng) {
 
             return roll;
         },
+        // keep  high
         "kh": function () {
             var arguments = Array.from(arguments).filter(arg => arg !== undefined);
             var roll = arguments.shift();
@@ -250,6 +266,7 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.reduce((x, y) => x + y));
         },
+        // keep low
         "kl": function () {
             var arguments = Array.from(arguments).filter(arg => arg !== undefined);
             var roll = arguments.shift();
@@ -259,6 +276,7 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.reduce((x, y) => x + y));
         },
+        // keep greater than
         ">": function () {
             var arguments = Array.from(arguments).filter(arg => arg !== undefined);
             var roll = arguments.shift();
@@ -268,6 +286,7 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.length);
         },
+        // keep equal to. (eg roll 5 dice and count the 6's)
         "e": function () {
             var arguments = Array.from(arguments).filter(arg => arg !== undefined);
             var roll = arguments.shift();
@@ -277,6 +296,7 @@ var Dice = function (command, rng) {
             self.kept = self.kept.concat(kept);
             return new Integer(kept.length);
         },
+        // not currently working
         "gm": function () {
             var sides = [
                     ["Separate them"],
@@ -329,6 +349,7 @@ var Dice = function (command, rng) {
         }
     };
 
+    // a tidy up block to allow multiple intutiive shortforms summon the same function
     self.operator.k = self.operator.kh;
     self.operator.b = self.operator.kh;
     self.operator.w = self.operator.kl;
@@ -339,6 +360,7 @@ var Dice = function (command, rng) {
     self.operator.swb = self.operator.starwars;
     self.operator.sws = self.operator.starwars;
 };
+
 
 Dice.prototype.roll = function (min, max) {
     var die = {
@@ -429,16 +451,14 @@ Dice.prototype.execute = function () {
                 console.log('  =', r, '\n');
                 break;
             case "gm":
-                var a = self.stack.pop();
                 console.log(c + ':');
-                console.log(' ', a);
-
+               
                 var r = self.operator[c]();
                 self.stack.push(r);
                 console.log('  =', r, '\n');
                 break;
             default:
-                self.stack.push(new Integer(parseInt(c)));
+                self.stack.push(new Integer(parseInt(c))); // will throw a NaN error if it encounters a non integer result
                 break;
         }
     });
