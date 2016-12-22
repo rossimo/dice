@@ -265,6 +265,7 @@ describe('Dice', function () {
     });
       it('checks output of gm dice is rolling a d30', function () {  // test this test works
         var dice = new Dice("gm");
+        dice.execute();
         assert.equal(roll.value, 15);
         assert.equal(roll.max, 30)
     });
@@ -272,7 +273,8 @@ describe('Dice', function () {
       it('checks output of gm dice is modifying comments', function () {  // test this test works
         var rng = [20, 20, 20].reverse();
           // 20 gives sides[21] = "You find a trap" +" "
-        var dice = new Dice("gm");
+        var dice = new Dice("gm", () => rng.pop());
+        dice.execute();
         assert.equal(dice.comment, "You find a trap "); // note space on end
         assert.equal(roll.max, 30)
     });
@@ -280,7 +282,8 @@ describe('Dice', function () {
       it('checks output of gm dice stacks', function () {  // test this test works
         var rng = [20, 20].reverse();
           // 20 gives sides[21] = "You find a trap" +" "
-        var dice = new Dice("gm ; comment");
+        var dice = new Dice("gm ; comment", () => rng.pop());
+        dice.execute();
         assert.equal(dice.comment, "You find a trap You find a trap ; comment"); // note spaces on end
         assert.equal(roll.max, 30)
     });
