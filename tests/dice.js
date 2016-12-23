@@ -263,51 +263,6 @@ describe('Dice', function () {
         assert.equal(starWars.value, 4);
         assert.equal(dice.comment, 'asdf');
     });
-      
-    
-      it('checks output of gm dice is modifying comments', function () {  // test this test works
-        var dice = new Dice("gm");
-        dice.execute();
-          
-        var sides = [
-                    ["Separate them"],
-                    ["Put them together"],
-                    ["Show their connection"],
-                    ["Show their connection increasing"],
-                    ["Show their connection strained"],
-                    ["The weather obstructs you"],
-                    ["The landscape obstructs you"],
-                    ["The enviroment obstructs you"],
-                    ["A beast obstructs you"],
-                    ["An NPC obstructs you"],
-                    ["Your past obstructs you"],
-                    ["Your equipment obstructs you"],
-                    ["An old friend makes contact"],
-                    ["An old enemy reappears"],
-                    ["Something bad on the horizon"],
-                    ["Something you believe in happens"],
-                    ["Something good happens"],
-                    ["Something useful happens"],
-                    ["You lose some equipment"],
-                    ["You lose a resource"],
-                    ["You find a trap"],
-                    ["Tensions escalate"],
-                    ["Show what your character is good at"],
-                    ["Show what your character likes"],
-                    ["Show what your character thinks of another character"],
-                    ["Someone has a job for you"],
-                    ["Someone has an offer for you"],
-                    ["Someone has something you want"],
-                    ["It is valuable, but the price is high"],
-                    ["Lose something, or another character is hurt"],
-                    []
-                ];
-        var indexval = sides.indexOf(dice.comment)
-        if (indexval > 0 && indexval <30) {
-            var testval = "True";
-            }
-        assert.equal(testval, "True"); // note space on end
-        
-    });
+// suitable gm test to go here once gm stabilises again.
     
 });
