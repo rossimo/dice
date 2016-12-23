@@ -297,7 +297,7 @@ var Dice = function (command, rng) {
             return new Integer(kept.length);
         },
         // not currently working
-        "gm": function (count) {
+        "gm": function () {
             var sides = [
                     ["Separate them"],
                     ["Put them together"],
@@ -331,12 +331,8 @@ var Dice = function (command, rng) {
                     ["Lose something, or another character is hurt"],
                     []
                 ];
-            var count = arguments.shift() || new Integer(1);
-            count = Math.max(Math.min(count.value, 3), 1);  // limit to 3 gm results
-            var roll = new Roll(0, sides.length - 1);
-            roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
-            roll.value = roll.dice.reduce((x, y) => x + y);
-            self.comment = sides[roll.value] + " " + self.comment
+            var gmindice = this.rng(1,sides.length-1)
+            self.comment = sides[gmindice] + " " + self.comment
             return roll;
         },           
         
@@ -456,13 +452,13 @@ Dice.prototype.execute = function () {
                 console.log('  =', r, '\n');
                 break;
             case "gm":
-                var a = self.stack.pop();
+               // var a = self.stack.pop();
                 console.log(c + ':');
-                console.log(' ', a);
-
-                var r = self.operator[c](a);
-                self.stack.push(r);
-                console.log('  =', r, '\n');
+               // console.log(' ', a);
+                var r = self.operator[c]();
+               // var r = self.operator[c](a);
+                //self.stack.push(r);
+                //console.log('  =', r, '\n');
                 break;
             default:
                 self.stack.push(new Integer(parseInt(c))); // will throw a NaN error if it encounters a non integer result
