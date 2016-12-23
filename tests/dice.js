@@ -263,4 +263,6 @@ describe('Dice', function () {
         assert.equal(starWars.value, 4);
         assert.equal(dice.comment, 'asdf');
     });
+// suitable gm test to go here once gm stabilises again.
+    
 });
