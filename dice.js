@@ -331,11 +331,8 @@ var Dice = function (command, rng) {
                     ["Lose something, or another character is hurt"],
                     []
                 ];
-            
-            count = Math.max(Math.min(count.value, 1), 1);
-
-            var roll = new Roll(-1, 1);
-                        
+            var count = arguments.shift() || new Integer(1);
+            count = Math.max(Math.min(count.value, 3), 1);  // limit to 3 gm results
             var roll = new Roll(0, sides.length - 1);
             roll.dice = _.range(count).map(() => self.roll(roll.min, roll.max));
             roll.value = roll.dice.reduce((x, y) => x + y);
