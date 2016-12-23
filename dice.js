@@ -331,9 +331,9 @@ var Dice = function (command, rng) {
                     ["Lose something, or another character is hurt"],
                     []
                 ];
-            var gmindice = this.rng(1,sides.length-1)
+            var gmindice = Math.floor(Math.random() * 30) + 1);
             self.comment = sides[gmindice] + " " + self.comment
-            return roll;
+            return;
         },           
         
         "+": function (a, b) {
