@@ -263,4 +263,14 @@ describe('Dice', function () {
         assert.equal(starWars.value, 4);
         assert.equal(dice.comment, 'asdf');
     });
+
+    it('rolls gm action', function () {
+        var rng = [0].reverse();
+        var dice = new Dice("gm", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 0);
+        var gm = dice.gmResult();
+        assert.equal(gm.description, 'Separate them');
+    });
 });
