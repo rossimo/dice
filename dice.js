@@ -2,7 +2,7 @@
 // for the slack front end work, look at index.js
 // index.js sends the input here to be carved into command and comment
 // command is then turned into results
-// results and comment are sent back to index.js for presentation
+// results and comment are sent back to index.js for presentation 
 
 var _ = require("lodash");
 var Lexer = require("lex");
