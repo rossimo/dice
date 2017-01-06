@@ -273,4 +273,13 @@ describe('Dice', function () {
         var gm = dice.gmResult();
         assert.equal(gm.description, 'Split them up Hard/soft');
     });
+     it('rolls 2gm ;comment action', function () {
+        var rng = [0,0].reverse();
+        var dice = new Dice("gm", () => rng.pop());
+        dice.execute();
+
+        assert.equal(dice.result(), 0);
+        var gm = dice.gmResult();
+        assert.equal(gm.description, 'Split them up Hard/soft Split them up Hard/soft comment');
+    });
 });
