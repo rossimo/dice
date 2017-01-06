@@ -271,6 +271,6 @@ describe('Dice', function () {
 
         assert.equal(dice.result(), 0);
         var gm = dice.gmResult();
-        assert.equal(gm.description, 'Separate them');
+        assert.equal(gm.description, 'Split them up Hard/soft');
     });
 });
