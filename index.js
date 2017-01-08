@@ -43,6 +43,20 @@ router.post('/', function *() {
                 value: starWars.faces,
                 short: false
             });
+        } else if (dice.onlyGm()) {
+            var gm = dice.gmResult();
+            response = '@' + user + ' rolled *' +  gm.description + '*';
+
+            // If the comment exists, add it to the end of the response
+            if (dice.comment.length > 0) {
+                response = response.concat(' for ' + dice.comment.trim());
+            }
+
+            fields.push({
+                title: 'Rolls',
+                value: 0,
+                short: false
+            });
         } else {
             response = '@' + user + ' rolled *' + result + '*';
 
