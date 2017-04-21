@@ -1,3 +1,9 @@
+// This file is the front end of /roll bot
+// it takes the input from slack and sends the full input to dice.js for processing
+// it manages the patreon advert, and how often people see it
+// it then reports the results of dice.js to the the user
+// all of the parsing, including seprating the input into command and comment happens in dice.js
+
 var _ = require("lodash");
 var request = require('request');
 var Dice = require("./dice");
@@ -18,7 +24,7 @@ router.post('/', function *() {
     var user = this.request.body.user_name;
     var channel = this.request.body.channel_name;
 
-    var command = this.request.body.text.toLowerCase();
+    var command = this.request.body.text.toLowerCase();  // user input is not case sensitive. all functions in dice.js to be lowercase.
     console.log(user + ' in ' + channel + ' rolled ' + command);
 
     var response = '';
